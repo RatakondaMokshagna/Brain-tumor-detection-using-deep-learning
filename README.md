@@ -26,7 +26,7 @@ kubectl
 bash
 Copy
 Edit
-git clone https://github.com/yourusername/seaiproject.git
+git clone https://github.com/RatakondaMokshagna/seaiproject.git
 cd seaiproject
 3. Start Minikube
 bash
