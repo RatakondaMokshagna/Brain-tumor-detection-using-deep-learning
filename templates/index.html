@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { 
+            max-width: 700px; 
+            margin-top: 50px; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
+        }
+        #drop-area { 
+            border: 2px dashed #007bff; 
+            padding: 20px; 
+            text-align: center; 
+            cursor: pointer; 
+            border-radius: 10px; 
+            transition: background-color 0.3s; 
+        }
+        #drop-area:hover { background-color: #f0f8ff; }
+        .hidden { display: none; }
+        #preview-container { 
+            margin-top: 20px; 
+            text-align: center; 
+        }
+        #preview { 
+            max-width: 100%; 
+            max-height: 350px; 
+            border-radius: 10px; 
+            margin-top: 10px; 
+            display: none; 
+            border: 2px solid #007bff;
+        }
+        #result { 
+            margin-top: 20px; 
+            text-align: center; 
+            padding: 15px; 
+            border-radius: 10px; 
+            background-color: #f1f1f1;
+        }
+        .prediction-text { 
+            color: #dc3545; 
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .explanation-text { 
+            color: #0c0d0d; 
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container text-center">
+        <h2 class="mb-4 text-primary">Brain Tumor Detection</h2>
+
+        <div id="drop-area">
+            <p>Drag & Drop an MRI image here or click to upload</p>
+            <input type="file" id="fileInput" class="form-control hidden" accept="image/*">
+        </div>
+
+        <button id="uploadBtn" class="btn btn-primary mt-3">Upload & Predict</button>
+
+        
+        <div id="preview-container">
+            <img id="preview" src="" alt="Uploaded Image">
+        </div>
+
+        
+        <div id="result">
+            <p id="prediction" class="prediction-text"></p>
+            <p id="explanation" class="explanation-text"></p>
+        </div>
+    </div>
+
+    <script>
+        let dropArea = document.getElementById('drop-area');
+        let fileInput = document.getElementById('fileInput');
+        let uploadBtn = document.getElementById('uploadBtn');
+        let preview = document.getElementById('preview');
+
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.style.backgroundColor = '#e3f2fd';
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.style.backgroundColor = 'white';
+        });
+
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.style.backgroundColor = 'white';
+            fileInput.files = event.dataTransfer.files;
+            showPreview();
+        });
+
+        dropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', showPreview);
+
+        function showPreview() {
+            let file = fileInput.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        uploadBtn.addEventListener('click', async () => {
+            let formData = new FormData();
+            let file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file first.');
+                return;
+            }
+
+            formData.append("file", file);
+
+            let response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            let data = await response.json();
+            
+            document.getElementById('prediction').innerHTML = `<strong>Prediction:</strong> ${data.prediction}`;
+            document.getElementById('explanation').innerHTML = `<strong>Explanation:</strong> ${data.generated_text}`;
+        });
+    </script>
+
+</body>
+</html>

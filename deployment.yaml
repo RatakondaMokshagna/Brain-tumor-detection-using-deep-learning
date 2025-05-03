@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brain-tumor-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: brain-tumor
+  template:
+    metadata:
+      labels:
+        app: brain-tumor
+    spec:
+      containers:
+      - name: brain-tumor
+        image: brain-tumor:latest  # This should be the local image name
+        imagePullPolicy: Never       # Ensure Kubernetes does not attempt to pull from a registry
+        ports:
+        - containerPort: 5000
