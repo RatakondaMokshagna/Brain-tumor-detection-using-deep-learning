@@ -2,12 +2,11 @@ from flask import Flask, request, jsonify, render_template
 import torch
 from torchvision import transforms
 from PIL import Image
-from transformers import pipeline  # Hugging Face text generation
+from transformers import pipeline 
 
-# Initialize Flask app
 app = Flask(__name__)
 
-# Load trained CNN model for tumor classification
+# Loading trained CNN model for tumor classification
 class BrainTumorCNN(torch.nn.Module):
     def __init__(self):
         super(BrainTumorCNN, self).__init__()
@@ -25,7 +24,7 @@ class BrainTumorCNN(torch.nn.Module):
         x = self.fc2(x)
         return x
 
-# Load model
+# Loading model
 model = BrainTumorCNN()
 model.load_state_dict(torch.load('custom_brain_tumor_model.pth', map_location=torch.device('cpu')))
 model.eval()
@@ -44,7 +43,7 @@ transform = transforms.Compose([
 def generate_text_llm(tumor_type):
     """Generate a short and clear medical explanation using Hugging Face's model."""
     
-    # Updated prompts for better response
+    # prompts
     medical_explanations = {
         "Glioma": "Gliomas are tumors that arise in the glial cells of the brain or spinal cord. They can be low-grade (slow-growing) or high-grade (aggressive). Treatment depends on the type and stage.",
         "Meningioma": "Meningiomas are typically benign tumors that develop in the meninges, the protective layers of the brain and spinal cord. They grow slowly and may not always require treatment unless they cause symptoms.",
@@ -52,11 +51,11 @@ def generate_text_llm(tumor_type):
         "Pituitary": "Pituitary tumors occur in the pituitary gland, affecting hormone production. Most are benign but can cause hormonal imbalances requiring medical or surgical treatment."
     }
 
-    # Use predefined explanations or fallback to a generated response
+
     if tumor_type in medical_explanations:
         return medical_explanations[tumor_type]
     
-    # If no predefined text, generate one dynamically
+    
     prompt = f"What is {tumor_type}? Provide a brief, medically accurate explanation."
     response = text_generator(prompt, max_length=80, do_sample=True)
     return response[0]["generated_text"]
@@ -80,7 +79,7 @@ def predict():
     img = Image.open(file).convert('RGB')
     img = transform(img).unsqueeze(0)
 
-    # Predict
+    # Prediction
     with torch.no_grad():
         outputs = model(img)
         _, predicted = torch.max(outputs, 1)
@@ -93,3 +92,4 @@ def predict():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
