@@ -1,48 +1,73 @@
-🧠 SEAIPROJECT – Brain Tumor Classification App (Flask + Docker + Kubernetes)
-This project is a deep learning web application built with Flask to classify brain tumors using a custom PyTorch model. The application is containerized with Docker and deployed on a Kubernetes cluster using Minikube.
+# Brain Tumor Classification Web Application (Flask, Docker, Kubernetes)
 
-🚀 Features
-🧠 Brain tumor image classification using deep learning
+## Overview
 
-🔬 Custom CNN model trained on MRI datasets
+This project is a deep learning-based web application designed to classify brain tumors from MRI images. The system uses a custom Convolutional Neural Network (CNN) implemented in PyTorch and provides predictions through a web interface built with Flask.
 
-⚙️ Flask backend with HTML UI for uploading MRI scans
+The application is containerized using Docker and deployed on a Kubernetes cluster using Minikube. The project demonstrates how a machine learning model can be integrated into a web application and deployed using modern containerization and orchestration technologies.
 
-🐳 Docker containerization
+## Features
 
-☸️ Kubernetes deployment using Minikube
+- Brain tumor classification from MRI images using deep learning
+- Custom CNN model implemented in PyTorch
+- Web interface for uploading MRI images and viewing predictions
+- Backend developed using Flask
+- Docker-based containerization for reproducible environments
+- Kubernetes deployment using Minikube for scalable application management
 
-⚙️ Getting Started
-1. Prerequisites
-Python 3.8+
+## Technologies Used
 
-Docker
+**Programming Language**
+- Python
 
-Minikube (with Docker driver)
+**Machine Learning Framework**
+- PyTorch
 
-kubectl
+**Web Framework**
+- Flask
 
-2. Clone the Repository
-bash
-Copy
-Edit
+**Containerization and Deployment**
+- Docker
+- Kubernetes (Minikube)
+
+**Libraries**
+- NumPy
+- OpenCV
+- pandas
+- scikit-learn
+- matplotlib
+
+## System Architecture
+
+The system consists of the following components:
+
+### Deep Learning Model
+A custom convolutional neural network trained on MRI brain tumor datasets.  
+The model performs classification of tumor types based on MRI images.
+
+### Web Application
+A Flask-based backend that handles image uploads and model inference.  
+A simple HTML interface allows users to upload MRI scans and receive predictions.
+
+### Containerization
+The application is packaged using Docker to ensure consistent execution across environments.
+
+### Orchestration
+The Docker container is deployed on a Kubernetes cluster using Minikube for managing application deployment.
+
+## Prerequisites
+
+Before running the application, ensure the following tools are installed:
+
+- Python 3.8 or higher
+- Docker
+- Minikube
+- kubectl
+
+## Installation
+
+Clone the repository:
+
+```bash
 git clone https://github.com/RatakondaMokshagna/seaiproject.git
 cd seaiproject
-3. Start Minikube
-bash
-Copy
-Edit
-minikube start --driver=docker
-eval $(minikube docker-env)
-4. Build and Deploy Using Makefile
-bash
-Copy
-Edit
-make        # or: make all
-5. Access the App
-bash
-Copy
-Edit
-make url
-Open the URL shown in your browser.
-
